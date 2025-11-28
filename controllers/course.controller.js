@@ -2,7 +2,7 @@ import Course from "../models/course.model.js"
 import AppError from "../utils/error.util.js";
 import { v2 as cloudinary} from 'cloudinary';
 
-
+import fs from 'fs/promises';
 
 const getAllCourses=async function(req,res,next) {
     
@@ -96,7 +96,7 @@ const createCourse=async(req,res,next)=>{
             course.thumbnail.public_id=result.public_id;
             course.thumbnail.secure_url=result.secure_url;
         }
-        
+        fs.rm(`uploads/${req.file.filename}`);
     }
 
     catch(e){
@@ -204,7 +204,7 @@ const addLectureToCourseById=async(req,res,next)=>{
             lectureData.lecture.public_id=result.public_id;
             lectureData.lecture.secure_url=result.secure_url;
         }
-       
+        fs.rm(`uploads/${req.file.filename}`);
     }
 
     }

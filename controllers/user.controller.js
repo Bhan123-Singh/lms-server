@@ -1,7 +1,7 @@
 import User from "../models/user.model.js";
 import AppError from "../utils/error.util.js";
 import cloudinary from 'cloudinary';
-
+import fs from 'fs/promises';
 import sendEmail from "../utils/sendEmail.js";
 import crypto from 'crypto';
 
@@ -54,7 +54,7 @@ const register=async(req,res,next)=>{
         user.avatar.secure_url=result.secure_url; //for convert the secure url into secure avatar url
 
         //Remove file from server
-       
+        fs.rm(`uploads/${req.file.filename}`)
        }
   }
   catch(e){
@@ -295,7 +295,7 @@ const updateUser=async(req,res,next)=>{
    user.avatar.secure_url=result.secure_url; //for convert the secure url into secure avatar url
 
    //Remove file from server
-
+   fs.rm(`uploads/${req.file.filename}`)
   }
 }
 catch(e){
