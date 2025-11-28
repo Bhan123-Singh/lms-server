@@ -7,7 +7,7 @@ import {config} from 'dotenv';
 import userRoutes from './routes/user.routes.js';
 import courseRoutes from  './routes/course.routes.js';
 import errorMiddleware from './middleware/error.middleware.js';
-import paymentRoutes from './routes/payment.route.js';
+//import paymentRoutes from './routes/payment.route.js';
 
 config();
 app.use(express.json());
@@ -32,7 +32,7 @@ app.use('/api/v1/user',userRoutes);
 app.use('/api/v1/courses',courseRoutes);
 
 //Routes define for payment here
-app.use('api/v1/payments',paymentRoutes);
+//app.use('api/v1/payments',paymentRoutes);
 
 app.all('*',(req,res)=>{
     res.status(404).send('oops! 404 page not found');
