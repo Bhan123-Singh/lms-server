@@ -1,6 +1,6 @@
 import Course from "../models/course.model.js"
 import AppError from "../utils/error.util.js";
-import cloudinary from 'cloudinary';
+import { v2 as cloudinary} from 'cloudinary';
 
 import fs from 'fs/promises';
 
@@ -41,7 +41,7 @@ const getLecturesByCourseId=async function(req,res,next){
         res.status(200).json({
             success:true,
             message:'Course lectures fetched successfully',
-            lectures:course.lectures
+            course
         })
 
     }
@@ -147,7 +147,7 @@ const updateCourse=async(req,res,next)=>{
 const removeCourse=async(req,res,next)=>{
 
      try{
-          const {id}=req.params;
+          ///const {id}=req.params;
           const course= await Course.findById(id);
           if(!course){
             return next( new AppError('Course with given id does not exits,500'))
@@ -178,13 +178,17 @@ const addLectureToCourseById=async(req,res,next)=>{
         const course=await Course.findById(id);
         console.log('courseId->',course)
          if(!course){
-            return next(new AppError('Course with given id does not exits',500))
+            return next(new AppError('Course with given id does not exits',404))
          }
 
       const lectureData={
         title,
         description,
-        lecture:{}
+        lecture:{
+            public_id:"",
+            secure_url:"",
+
+        }
       };
     
       if(req.file){
@@ -192,6 +196,7 @@ const addLectureToCourseById=async(req,res,next)=>{
         try {
             {
         const result=await cloudinary.uploader.upload(req.file.path,{
+            resource_type: "video",
             folder:'lms'
         });
     
@@ -201,14 +206,7 @@ const addLectureToCourseById=async(req,res,next)=>{
         }
         fs.rm(`uploads/${req.file.filename}`);
     }
-    
-    await course.save()// to save the database
-    
-    res.status(200).json({
-        success:true,
-        message:'Course added successfully',
-        course
-    })
+
     }
     catch(e){
           return next(new AppError(e.message,500))
@@ -220,7 +218,7 @@ const addLectureToCourseById=async(req,res,next)=>{
     course.lectures.push(lectureData);
     course.numbersOflectures=course.lectures.length;
     await course.save();// save in database
-    res.status(200).json({
+     return res.status(200).json({
          success:true,
          message:'Lecture successfully to added the course',
          course

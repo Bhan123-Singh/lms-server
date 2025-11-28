@@ -39,14 +39,13 @@ const courseSchema=new Schema({
         title:String,
         description:String,
         lecture:{
-            public_id:{
-                type:String
-            },
-            secure_url:{
-                type:String
-            }
+            public_id:String,
+            
+            secure_url:String,
+            
         }
-    }],
+    }
+],
     numbersOflectures:{
         type:Number,
         default:0,
