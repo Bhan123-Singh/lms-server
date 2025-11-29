@@ -23,6 +23,11 @@ app.use(morgan('dev'));  // It is a library which is the see the url path on the
 app.use('/ping',function(req,res){
     res.send('Pong');
 });
+app.get("/", (req, res) => {
+  res.send("Server is running...");
+});
+
+
 
 
 // Routes  define for user 3 modules
