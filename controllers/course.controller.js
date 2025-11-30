@@ -1,12 +1,14 @@
 import Course from "../models/course.model.js"
 import AppError from "../utils/error.util.js";
 import { v2 as cloudinary} from 'cloudinary';
+import connectionToDB from '../config/dbConnection.js';
 
 import fs from 'fs/promises';
 
 const getAllCourses=async function(req,res,next) {
     
     try{
+        await connectionToDB();
         const courses= await Course.find({}).select('-lectures');
         // '-select' means don't select lectures
         res.status(200).json({
