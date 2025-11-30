@@ -4,6 +4,7 @@ import cloudinary from 'cloudinary';
 import fs from 'fs/promises';
 import sendEmail from "../utils/sendEmail.js";
 import crypto from 'crypto';
+import connectionToDB from '../config/dbConnection.js';
 
 const cookieOptions={
      maxAge:7*24*60*1000, //7days
@@ -17,11 +18,13 @@ const register=async(req,res,next)=>{
    return next(new AppError('All fields are required',400))  /* if arise the error then execute the process->
                                                                 AppError ->(if user forgot given the some condition then use -> errorMiddleware*/
  }
+   await connectionToDB();
  const userExits= await User.findOne({email});
  if(userExits){
    return next(new AppError('Email already exits',400))
  }
-
+ 
+  await connectionToDB();
  const user= await User.create({
     fullName,
     email,
@@ -84,6 +87,7 @@ const login=async(req,res,next)=>{
     if(!email || !password){
       return next(new AppError('All field are required',400));
     }
+     await connectionToDB();
     const user= await User.findOne({
       email
     }).select('+password');
@@ -99,7 +103,7 @@ const login=async(req,res,next)=>{
     if ( !isPasswordCorrect ) {
       return next( new AppError ( ' Email or password does not match', 400))
     }
-    
+     await connectionToDB();
     const token= await user.generateJWTToken();
     user.password=undefined;
     res.cookie('token',token,cookieOptions);
@@ -130,7 +134,8 @@ const logout=(req,res)=>{
 };
 const getProfile=async(req,res)=>{
 
-  try{
+  try{ 
+     await connectionToDB();
     const userId=req.user.id;
     const user=await User.findById(userId);
     res.status(200).json({
@@ -260,6 +265,7 @@ const changePassword=async(req,res,next)=>{
 const updateUser=async(req,res,next)=>{
   const {fullName}=req.body; //take fullName from multer in req
   const {id}=req.user;// take id to token ,url
+   await connectionToDB();
   const user=await User.findById(id);
   console.log("user",user)
   //for checking id exists in databse or not

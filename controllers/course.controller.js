@@ -34,7 +34,7 @@ const getLecturesByCourseId=async function(req,res,next){
 
     try{
         const {id}=req.params;
-
+          await connectionToDB();
         const course=await Course.findById(id);
         if(!course){
             return next(new AppError('Invalid Course id',400))
@@ -65,7 +65,7 @@ const createCourse=async(req,res,next)=>{
        console.log('createcourse',title,description,category,createdBy);
 
 
-
+        await connectionToDB();
     const course=await Course.create({
         title,
         description,
@@ -122,6 +122,7 @@ const updateCourse=async(req,res,next)=>{
   
     try{
          const {id}=req.params;
+           await connectionToDB();
          const course=await Course.findByIdAndUpdate(id,{
           $set:req.body
          },
@@ -150,6 +151,7 @@ const removeCourse=async(req,res,next)=>{
 
      try{
           ///const {id}=req.params;
+            await connectionToDB();
           const course= await Course.findById(id);
           if(!course){
             return next( new AppError('Course with given id does not exits,500'))
@@ -176,7 +178,7 @@ const addLectureToCourseById=async(req,res,next)=>{
         if(!title || !description){
             return next (new AppError('All field are requireed',400))
         }
-    
+           await connectionToDB();
         const course=await Course.findById(id);
         console.log('courseId->',course)
          if(!course){
