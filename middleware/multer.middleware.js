@@ -1,7 +1,10 @@
 import path from 'path';
 import multer from 'multer';
 
-const storage = multer.diskStorage({});;
+const storage = multer.diskStorage({
+   destination: (_req, _file, cb) => {
+    cb(null, "/tmp");
+}});;
 
 const upload = multer({
   storage, // no uploads/ folder

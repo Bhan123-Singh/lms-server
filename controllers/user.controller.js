@@ -293,7 +293,7 @@ const updateUser=async(req,res,next)=>{
    width:250,
    height:250,
    gravity:'faces',
-   crop:'fil'
+   crop:'fill'
   });
 
   if(result){
@@ -301,7 +301,7 @@ const updateUser=async(req,res,next)=>{
    user.avatar.secure_url=result.secure_url; //for convert the secure url into secure avatar url
 
    //Remove file from server
-   fs.rm(`uploads/${req.file.filename}`)
+   await fs.rm(req.file.path)
   }
 }
 catch(e){
