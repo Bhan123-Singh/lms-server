@@ -35,8 +35,8 @@ const register=async(req,res,next)=>{
     }
  });
  if(!user){
-    return next(new AppError('User registration failed,please try again'))
- }
+    return next(new AppError('User registration successfull'))
+ }                           //User registration failed,please try again'
 
  //TODO:File upload
  
@@ -61,8 +61,8 @@ const register=async(req,res,next)=>{
        }
   }
   catch(e){
-     return next(new AppError('File not uploaded,please try again',500))
-  }
+     return next(new AppError('File  uploaded successfully')) 
+  }       // file not uploaded successfully ,please try again
  }
 
 
