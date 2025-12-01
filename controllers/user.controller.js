@@ -57,7 +57,7 @@ const register=async(req,res,next)=>{
         user.avatar.secure_url=result.secure_url; //for convert the secure url into secure avatar url
 
         //Remove file from server
-        await fs.rm(`uploads/${req.file.filename}`)
+        await fs.rm(req.file.path);
        }
   }
   catch(e){
