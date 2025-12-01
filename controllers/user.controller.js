@@ -264,7 +264,7 @@ const changePassword=async(req,res,next)=>{
 
 const updateUser=async(req,res,next)=>{
   const {fullName}=req.body; //take fullName from multer in req
-  const {id}=req.user;// take id to token ,url
+  const {id}=req.user?.id;// take id to token ,url
    await connectionToDB();
   const user=await User.findById(id);
   console.log("user",user)
