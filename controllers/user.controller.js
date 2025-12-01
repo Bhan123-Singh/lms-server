@@ -24,7 +24,7 @@ const register=async(req,res,next)=>{
    return next(new AppError('Email already exits',400))
  }
  
-  await connectionToDB();
+ 
  const user= await User.create({
     fullName,
     email,
@@ -35,7 +35,7 @@ const register=async(req,res,next)=>{
     }
  });
  if(!user){
-    return next(new AppError('User registration successfull'))
+    return next(new AppError('User registration failed ! please try again'))
  }                           //User registration failed,please try again'
 
  //TODO:File upload
@@ -49,7 +49,7 @@ const register=async(req,res,next)=>{
         width:250,
         height:250,
         gravity:'faces',
-        crop:'fil'
+        crop:'fill'
        });
 
        if(result){
@@ -57,11 +57,11 @@ const register=async(req,res,next)=>{
         user.avatar.secure_url=result.secure_url; //for convert the secure url into secure avatar url
 
         //Remove file from server
-        fs.rm(`uploads/${req.file.filename}`)
+        await fs.rm(`uploads/${req.file.filename}`)
        }
   }
   catch(e){
-     return next(new AppError('File  uploaded successfully')) 
+     return next(new AppError(' file not uploaded successfully ! please try again',500)) 
   }       // file not uploaded successfully ,please try again
  }
 
